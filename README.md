@@ -14,7 +14,7 @@ Add `dart_multimethod` to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  dart_multimethod: ^0.0.1
+  dart_multimethod: ^0.0.2
 ```
 
 ### Import
@@ -30,6 +30,6 @@ import 'package:dart_multimethod/dart_multimethod.dart';
 ```dart
 import 'package:dart_multimethod/dart_multimethod.dart';
 
-final area = Multimethod<MyClass, String>((o) => o.name).when('first', (o) => '${o.name} square');
+final area = Multimethod<String, MyClass, String>((o) => o.name).when('first', (o) => '${o.name} square');
 print(area(MyClass('first')));  // first square
 ```

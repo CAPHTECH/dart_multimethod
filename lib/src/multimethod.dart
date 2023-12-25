@@ -1,34 +1,39 @@
-class Multimethod<T, U extends dynamic> {
-  Multimethod([this._dispatch]);
+typedef Dispatch<S, T> = S Function(T arg);
+typedef Method<T, U> = U Function(T arg);
 
-  dynamic Function(T)? _dispatch;
-  U Function(T)? _default;
+class Multimethod<S, T, U extends dynamic> {
+  Multimethod({Dispatch<S, T>? dispatch, Map<S, Method<T, U>>? methods}) : _dispatch = dispatch {
+    if (methods != null) _methods.addAll(methods);
+  }
 
-  final Map<dynamic, U Function(T)> _methods = {};
+  Dispatch<S, T>? _dispatch;
+  Method<T, U>? _default;
 
-  Multimethod<T, U> dispatch(dynamic Function(T arg) dispatch) {
+  final Map<S, Method<T, U>> _methods = {};
+
+  Multimethod<S, T, U> dispatch(S Function(T arg) dispatch) {
     _dispatch = dispatch;
     return this;
   }
 
-  Multimethod<T, U> defaultMethod(U Function(T arg) method) {
+  Multimethod<S, T, U> defaultMethod(U Function(T arg) method) {
     _default = method;
     return this;
   }
 
-  Multimethod<T, U> when(dynamic predicate, U Function(T arg) method) {
+  Multimethod<S, T, U> when(dynamic predicate, U Function(T arg) method) {
     _methods[predicate] = method;
     return this;
   }
 
-  Multimethod<T, U> whenAny(Iterable<dynamic> predicates, U Function(T arg) method) {
+  Multimethod<S, T, U> whenAny(Iterable<dynamic> predicates, U Function(T arg) method) {
     for (final predicate in predicates) {
       _methods[predicate] = method;
     }
     return this;
   }
 
-  Multimethod<T, U> remove(dynamic predicate) {
+  Multimethod<S, T, U> remove(dynamic predicate) {
     _methods.remove(predicate);
     return this;
   }
